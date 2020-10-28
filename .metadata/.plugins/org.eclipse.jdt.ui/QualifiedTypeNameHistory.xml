@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="jade.Boot"/>
+    <fullyQualifiedTypeName name="Behaviours.MyFSM"/>
+    <fullyQualifiedTypeName name="jade.core.behaviours.DataStore"/>
+    <fullyQualifiedTypeName name="jade.util.leap.LinkedList"/>
+    <fullyQualifiedTypeName name="jade.lang.acl.MessageTemplate"/>
+    <fullyQualifiedTypeName name="fsm.EsperarPropuestaInicialBehaviour"/>
+    <fullyQualifiedTypeName name="fsm.EnviarPropuestaBehaviour"/>
+    <fullyQualifiedTypeName name="fsm.MCPBehaviour"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.Collections"/>
+    <fullyQualifiedTypeName name="agents.AgentNegotiator"/>
+    <fullyQualifiedTypeName name="jade.lang.acl.ACLMessage"/>
+    <fullyQualifiedTypeName name="jade.core.Agent"/>
+    <fullyQualifiedTypeName name="Ontology.MCPOntology"/>
+    <fullyQualifiedTypeName name="jade.content.lang.sl.SLCodec"/>
+    <fullyQualifiedTypeName name="jade.content.lang.Codec"/>
+    <fullyQualifiedTypeName name="jade.content.onto.Ontology"/>
+    <fullyQualifiedTypeName name="fsm_2.MCPBehaviour"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
+    <fullyQualifiedTypeName name="jade.core.AID"/>
+    <fullyQualifiedTypeName name="fsm.EvaluarPropuestaBehaviour"/>
+    <fullyQualifiedTypeName name="agent.AgentNegotiator"/>
+    <fullyQualifiedTypeName name="behaviours.SubscriptionInitiator"/>
+    <fullyQualifiedTypeName name="jade.domain.DFService"/>
+    <fullyQualifiedTypeName name="Ontology.IsMyZeuthen"/>
+    <fullyQualifiedTypeName name="Ontology.Movie"/>
+    <fullyQualifiedTypeName name="jade.content.onto.basic.Action"/>
+    <fullyQualifiedTypeName name="Ontology.SeeMovie"/>
+    <fullyQualifiedTypeName name="jade.content.schema.ObjectSchema"/>
+    <fullyQualifiedTypeName name="jade.util.leap.ArrayList"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+</qualifiedTypeNameHistroy>

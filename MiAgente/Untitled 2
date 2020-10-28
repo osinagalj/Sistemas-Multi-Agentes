@@ -1,0 +1,6 @@
+import jade.core.Agent; es una libreria qu
+e la tengo que agregar en click derecho en el proyecyo,,build path, configure buildpath
+
+RunConfiguration - > Main -> MainClass -> jade.Boot
+
+Arguments -> Program arguments -> -gui MiAgente:MiAgente

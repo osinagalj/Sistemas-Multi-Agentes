@@ -1,0 +1,18 @@
+package fsm;
+
+import jade.core.behaviours.Behaviour;
+
+public class ConflictoBehaviour extends Behaviour {
+
+	@Override
+	public void action() {
+		System.out.print("No se ha llegado a un acuerdo");
+
+	}
+
+	@Override
+	public boolean done() {
+		return true;
+	}
+
+}

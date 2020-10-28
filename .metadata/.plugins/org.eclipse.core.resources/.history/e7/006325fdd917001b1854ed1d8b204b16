@@ -1,0 +1,53 @@
+package fsm;
+
+import Ontology.IsMyZeuthen; 
+import agents.AgentNegotiator;
+import jade.content.lang.Codec.CodecException;
+import jade.content.onto.OntologyException;
+import jade.core.behaviours.Behaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+
+/*
+ Tengo que calcuar mi zeuthen y enviarlo en el message template
+ */
+
+public class CalcularZeuthenBehaviour extends Behaviour {
+
+	@Override
+	public void action() {
+		
+		System.out.println(((AgentNegotiator)myAgent).getNombre() + " esta calculando el Zeuthen");
+		ACLMessage pelicula_propuesta = (ACLMessage)getDataStore().get(MCPBehaviour.PROPUESTA);
+		double zeuthen;
+		if(pelicula_propuesta != null) {
+			double uPropActual = ((AgentNegotiator)myAgent).getRatingPropuestaActual();
+			double uPropRecibida = ((AgentNegotiator)myAgent).getRating(pelicula_propuesta.getContent());			
+			zeuthen = (uPropActual - uPropRecibida) / uPropActual; // CALCULAR ZEUTHEN Z = (U(prop_actual) - U(prop_recibida)) / U(prop_actual)
+				
+		}else {
+			zeuthen = 1;
+		}
+
+		getDataStore().put(MCPBehaviour.ULTIMO_ZEUTHEN, zeuthen);
+		ACLMessage ult_msg = (ACLMessage)getDataStore().get(MCPBehaviour.ULTIMO_MSG);
+		
+		ACLMessage informZ = ult_msg.createReply();
+		informZ.setPerformative(ACLMessage.INFORM);
+		informZ.setContent("" + zeuthen); // IsZeuthen de la ontologia
+		
+		try {
+			myAgent.getContentManager().fillContent(informZ, new IsMyZeuthen(zeuthen));
+		} catch (CodecException | OntologyException e) {
+			e.printStackTrace();
+		}
+		myAgent.send(informZ);
+				
+	}
+
+	@Override
+	public boolean done() {
+		return true;
+	}
+
+}

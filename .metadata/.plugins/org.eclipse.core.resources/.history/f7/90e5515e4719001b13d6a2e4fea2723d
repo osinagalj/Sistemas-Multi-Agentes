@@ -1,0 +1,80 @@
+package fsm;
+  
+
+import Ontology.MCPOntology;
+import Ontology.Movie;
+import Ontology.SeeMovie;
+import agents.AgentNegotiator;
+import jade.content.lang.Codec;
+import jade.content.lang.Codec.CodecException;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
+import jade.content.onto.OntologyException;
+import jade.content.onto.basic.Action;
+import jade.core.AID;
+import jade.core.behaviours.Behaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.lang.acl.ACLMessage;
+
+/*
+ Prepara un mensaje y lo envia 
+*/
+public class EnviarPropuestaBehaviour extends Behaviour {
+
+	
+	private Codec codec = new SLCodec();
+	private Ontology ontology = MCPOntology.getInstance();
+	
+	
+	public EnviarPropuestaBehaviour() {}
+	
+	@Override
+	public void action() {
+		
+		
+		
+			ACLMessage ultimoMsg = (ACLMessage) getDataStore().get(MCPBehaviour.ULTIMO_MSG);
+			
+			ACLMessage msg;
+			if(ultimoMsg == null)
+			{	
+				System.out.println(" ------------------------------------   Start of the negotiation   ----------------------------------- ");
+				System.out.println("\n    >>>>>>>>>>>>>> Propose of "+ ((AgentNegotiator)myAgent).getNombre() + " = "+ ((AgentNegotiator)myAgent).getPropuestaActual().getName());
+				msg = new ACLMessage(ACLMessage.PROPOSE); 
+				msg.addReceiver((AID)getDataStore().get(MCPBehaviour.IDR));
+				msg.setLanguage(codec.getName());
+				msg.setOntology(ontology.getName());
+				msg.setConversationId(String.valueOf(System.currentTimeMillis()));
+				msg.setInReplyTo("");
+
+			}else
+			 {					
+				System.out.println("\n   >>>>>>>>>>>>>>  Propose of  "+ ((AgentNegotiator)myAgent).getNombre() + " = "+ ((AgentNegotiator)myAgent).getPropuestaActual().getName());
+				msg = ultimoMsg.createReply();
+				msg.setPerformative(ACLMessage.PROPOSE);
+				//When a response is created, the ontology and codec are automatically set
+
+			 }
+			
+			Action action = new Action((AID)msg.getAllReceiver().next(), new SeeMovie(((AgentNegotiator)myAgent).getPropuestaActual()));
+						
+			try {
+				myAgent.getContentManager().fillContent(msg,action);
+			} catch (CodecException | OntologyException e) {
+				e.printStackTrace();
+			}
+			
+			
+			((AgentNegotiator)myAgent).nextProposal(); // When I send a proposal, whether initial or not, I have to update the index.
+			myAgent.send(msg);
+		}
+
+
+	@Override
+	public boolean done() {
+		return true;
+	}
+
+}

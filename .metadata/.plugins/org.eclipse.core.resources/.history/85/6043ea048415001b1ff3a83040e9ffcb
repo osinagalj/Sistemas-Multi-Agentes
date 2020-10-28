@@ -1,0 +1,66 @@
+package agents;
+
+
+import Ontology.MCPOntology; 
+
+import fsm.MCPBehaviour;
+import jade.content.lang.Codec;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
+
+import behaviours.SubscriptionInitiator;
+
+
+public class Agent_initiator extends AgentNegotiator {
+			
+	protected void setup() {
+		super.setup();
+		
+	
+		
+		DFAgentDescription template = new DFAgentDescription();
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("Pelicula");
+		sd.setName("recibe-propuesta");
+		template.addServices(sd);
+		try {
+			DFAgentDescription[] result = DFService.search(this, template);
+			if (result.length > 0)
+				//addBehaviour(new NumberInitiatorBehaviour(result[0].getName()));
+				this.addBehaviour(new MCPBehaviour(true,null,result[0].getName()));
+				
+			else {
+				addBehaviour( new SubscriptionInitiator(template));
+						
+						
+						//
+						/*
+						new SubscriptionInitiator( this,DFService.createSubscriptionMessage( this, getDefaultDF(), template, null)) 
+						{
+						protected void handleInform(ACLMessage inform) {
+						try {
+							DFAgentDescription[] result = DFService.decodeNotification(inform.getContent());
+							if (result[0].getAllServices().hasNext())
+								addBehaviour(new MCPBehaviour(true,null,result[0].getName()));
+							}
+							catch (FIPAException fe) {fe.printStackTrace(); }
+							}
+						}
+						
+						*/
+						//
+						;
+			}
+
+		}
+			catch (FIPAException fe) { fe.printStackTrace(); }
+		}
+		
+}
+	
+

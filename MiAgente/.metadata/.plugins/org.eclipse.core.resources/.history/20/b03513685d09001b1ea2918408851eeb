@@ -1,0 +1,21 @@
+import jade.Boot;
+import jade.core.Agent;
+import jade.wrapper.*;
+
+public class MiAgente {
+	
+	protected void setup() {
+		System.out.println("El agente" + getAID().getName() + "esta activo");
+		
+		this.addBehaviour(new MiBehaviour()); 
+	}
+	
+	protected void takeDown() {
+		AgentContainer c = getContainerController();
+		try {
+	      AgentController a = c.createNewAgent( "Agente2", 	"MiAgente", null );
+	      a.start();
+	  }
+	  catch (StaleProxyException e){}
+	}
+}

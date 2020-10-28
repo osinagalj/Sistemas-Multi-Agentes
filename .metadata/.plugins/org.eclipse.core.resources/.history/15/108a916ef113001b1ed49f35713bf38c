@@ -1,0 +1,104 @@
+package agents;
+
+
+import jade.content.ContentElement; 
+
+
+import fsm_2.EsperarPropuestaInicialBehaviour;
+
+import jade.content.lang.Codec.CodecException;
+
+import jade.content.onto.OntologyException;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
+import jade.wrapper.StaleProxyException;
+import jade.wrapper.*;
+import Ontology.IsMyZeuthen;
+
+
+public class Agent_responder extends AgentNegotiator {
+		
+
+	protected void setup() {
+		
+		//Creo al agente 
+		AgentContainer c = getContainerController();
+		try {
+	       AgentController control = c.createNewAgent( "AgenteEmisor", "agents.Agent_initiator",null);
+	       control.start();
+		}
+		catch (StaleProxyException e){}
+
+	
+		
+		super.setup();
+		
+		// Crea una descripción del agente para el DF
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.setName(getAID());
+		
+		// Crea una descripción del servicio
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("Pelicula");
+		sd.setName("recibe-propuesta");
+		dfd.addServices(sd);
+		try {
+			DFService.register(this, dfd);
+		}
+		catch (FIPAException fe) {
+			fe.printStackTrace();
+		}
+				
+
+		this.addBehaviour(new EsperarPropuestaInicialBehaviour());
+		
+		
+
+	   
+		
+		
+		
+		//Ontology
+/*
+		MessageTemplate mt = MessageTemplate.and(
+				MessageTemplate.MatchOntology(super.codec.getName()),
+				MessageTemplate.MatchOntology(super.ontology.getName()));
+		//ACLMessage msg = blockingReceive(mt);
+		try {
+			ContentElement ce = null;
+			if (msg.getPerformative() == ACLMessage.INFORM) {
+				ce = getContentManager().extractContent(msg);
+				IsMyZeuthen p = (IsMyZeuthen)ce; 
+				double c = p.getZeuthen(); // Preguntar si es un double o no
+				System.out.println("ZEUTHEN = " + c);
+			}
+		}
+		catch (CodecException ce) {
+			ce.printStackTrace();
+		}
+		catch (OntologyException oe) {
+			oe.printStackTrace();
+		}
+		*/
+
+	}
+	
+
+
+protected void takeDown() {
+	try {
+		DFService.deregister(this);
+	}
+	catch (FIPAException fe) {
+		fe.printStackTrace();
+	}
+
+}
+	
+}

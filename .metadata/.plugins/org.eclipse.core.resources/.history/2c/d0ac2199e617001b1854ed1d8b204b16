@@ -1,0 +1,72 @@
+package fsm;
+
+import agents.AgentNegotiator;
+import jade.core.behaviours.Behaviour;
+/*
+Recibo el zeuthen del oponente
+Comparo y decido quien es el que tiene que conceder
+Si mi zeuthen es el menor, tengo que proponer una propuesta
+Si mi zeuthen es mayor, tengo que esperar una propuesta porque al que le toca proponer es al otro.
+
+	Va a preparar el template para esperar respuesta
+	
+	//El que tiene menor valor de zheuten tiene que conceder 
+	 * 
+*/
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+
+public class RecibirZeuthenBehaviour extends Behaviour {
+
+	private boolean flag;
+	private int aux = -1;
+	
+	public RecibirZeuthenBehaviour() {
+		this.flag = false;
+	}
+	
+	//Si mi zeuthen es menor tengo que enviar una prop, osea retornar 0
+	//Si mi zeuthen es mayor tengo que esperar una propuesta y retornar 1 para la maquina de estados
+	@Override
+	public void action() {
+		
+		MessageTemplate template = (MessageTemplate)getDataStore().get(MCPBehaviour.MESSAGE_TEMPLATE);
+		ACLMessage respuesta = myAgent.receive(template);
+		
+		if (respuesta != null) {
+			System.out.println(((AgentNegotiator)myAgent).getNombre() + " recibio el zeuthen del oponente");
+			flag = true;
+			double ultimo_zeuthen = (Double)getDataStore().get(MCPBehaviour.ULTIMO_ZEUTHEN);
+			//System.out.println("ultimo zeuthen " + ultimo_zeuthen);
+			if(ultimo_zeuthen < Double.parseDouble(respuesta.getContent())){ // MiZeuthen < ZeuthenRecibido
+				aux = 0;
+				System.out.println(((AgentNegotiator)myAgent).getNombre() + " tiene que proponer");
+			}else {
+				aux = 1;
+				System.out.println(((AgentNegotiator)myAgent).getNombre() + " tiene que esperar ");
+			}
+			
+		}
+		else
+			block();
+				
+
+	}
+
+	@Override
+	public boolean done() {
+
+		return flag;
+	}
+	
+	@Override
+	public void reset() {
+		super.reset();
+		this.flag = false;
+	}
+	
+	@Override
+	public int onEnd(){
+		return aux; 
+	}
+}

@@ -1,0 +1,112 @@
+package fsm;
+  
+
+import Ontology.MCPOntology;
+import Ontology.Movie;
+import Ontology.SeeMovie;
+import agents.AgentNegotiator;
+import jade.content.lang.Codec;
+import jade.content.lang.Codec.CodecException;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
+import jade.content.onto.OntologyException;
+import jade.content.onto.basic.Action;
+import jade.core.AID;
+import jade.core.behaviours.Behaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.lang.acl.ACLMessage;
+
+/*
+ Prepara un mensaje y lo envia 
+*/
+public class EnviarPropuestaBehaviour extends Behaviour {
+
+	
+	private Codec codec = new SLCodec();
+	private Ontology ontology = MCPOntology.getInstance();
+	
+	
+	public EnviarPropuestaBehaviour() {}
+	
+	@Override
+	public void action() {
+		
+		
+		//try {
+			ACLMessage ultimoMsg = (ACLMessage) getDataStore().get(MCPBehaviour.ULTIMO_MSG);
+			
+			//System.out.println("Enviar Propuesta = " + ultimoMsg);
+			if(ultimoMsg == null) {
+				
+				System.out.println(" ------------------------------------   Inicio de la negociacion   ----------------------------------- ");
+				System.out.println("\n    >>>>>>>>>>>>>> Propuesta de "+ ((AgentNegotiator)myAgent).getNombre() + " = "+ ((AgentNegotiator)myAgent).getPropuestaActual().getName());
+				ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE); 
+				msg.addReceiver((AID)getDataStore().get(MCPBehaviour.IDR));
+				msg.setLanguage(codec.getName());
+				msg.setOntology(ontology.getName());
+				msg.setContent(((AgentNegotiator)myAgent).getPropuestaActual().getName()); //preguntar, solo el name?
+				msg.setConversationId(String.valueOf(System.currentTimeMillis()));
+				msg.setInReplyTo("");
+				
+			
+				//myAgent.getContentManager().fillContent(msg, new Action(msg.getAllReceiver(), new SeeMovie() )); //Aca usar el df
+				//myAgent.getContentManager().fillContent(msg,new SeeMovie());
+				myAgent.send(msg);
+				//getPropuestaActual
+				
+				//msg.setContent
+				
+			}else {
+								
+				System.out.println("\n   >>>>>>>>>>>>>>  Propuesta de "+ ((AgentNegotiator)myAgent).getNombre() + " = "+ ((AgentNegotiator)myAgent).getPropuestaActual().getName());
+				ACLMessage msg = ultimoMsg.createReply();
+				msg.setContent(((AgentNegotiator)myAgent).getPropuestaActual().getName()); //Este no iria si uso la ontologia
+				msg.setPerformative(ACLMessage.PROPOSE);
+				msg.setLanguage(codec.getName());
+				msg.setOntology(ontology.getName());
+				SeeMovie s = new SeeMovie(((AgentNegotiator)myAgent).getPropuestaActual());
+				/*
+				Action action = new Action();
+				DFAgentDescription dfd = new DFAgentDescription();
+
+				action.setActor(myAgent.getAID());
+				//dfd.getName() , myAgent.getAID() ,  msg.getReceiver(0), new AID("Receptor",AID.ISLOCALNAME)
+				//System.out.print("NOMBRE = " + myAgent.getAID().getName());
+				action.setAction(new SeeMovie(new Movie("a"))); 			//la movie es ((AgentNegotiator)myAgent).getPropuestaActual       
+				
+				try {
+					myAgent.getContentManager().fillContent(msg,action);
+				} catch (CodecException | OntologyException e) {
+				
+					e.printStackTrace();
+				}
+				*/
+				
+				
+				//Tambien agregar en el mensaje inicial 
+				
+				myAgent.send(msg);
+				
+				
+				
+			}
+		
+			((AgentNegotiator)myAgent).aumentarPropuesta(); // Luego de enviar una propuesta, ya esea inicial o no, tengo que actualizar el indice
+
+		}
+		//catch (CodecException ce) {
+		//		ce.printStackTrace();
+		//}
+		//catch (OntologyException oe) {
+		//	oe.printStackTrace();
+	//	}
+	//}
+
+	@Override
+	public boolean done() {
+		return true;
+	}
+
+}

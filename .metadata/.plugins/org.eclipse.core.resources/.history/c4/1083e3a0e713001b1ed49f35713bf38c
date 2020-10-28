@@ -1,0 +1,71 @@
+package fsm;
+
+import Ontology.IsMyZeuthen;
+
+import agent.AgentNegotiator;
+import jade.content.lang.Codec.CodecException;
+import jade.content.onto.OntologyException;
+import jade.core.behaviours.Behaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+
+/*
+ Tengo que calcuar mi zeuthen y enviarlo en el message template
+ */
+
+public class CalcularZeuthenBehaviour extends Behaviour {
+
+	@Override
+	public void action() {
+		
+		System.out.println(myAgent.getAID().getName() + " esta calculando el Zeuthen");
+		ACLMessage pelicula_propuesta = (ACLMessage)getDataStore().get(MCPBehaviour.PROPUESTA);
+		double zeuthen;
+		if(pelicula_propuesta != null) {
+			//System.out.print("pelicula propuesa = " + pelicula_propuesta);
+			double uPropActual = ((AgentNegotiator)myAgent).getRatingPropuestaActual();
+			double uPropRecibida = ((AgentNegotiator)myAgent).getRating(pelicula_propuesta.getContent());
+			//System.out.println("uPropActual = " + uPropActual);
+			//System.out.println("uPropRecibida = " + uPropRecibida);
+			
+			zeuthen = (uPropActual - uPropRecibida) / uPropActual; // CALCULAR ZEUTHEN Z = (U(prop_actual) - U(prop_recibida)) / U(prop_actual)
+				
+		}else {
+			zeuthen = 1;
+		}
+		//System.out.println("zeuhten = " + zeuthen);
+		getDataStore().put(MCPBehaviour.ULTIMO_ZEUTHEN, zeuthen);
+		ACLMessage ult_msg = (ACLMessage)getDataStore().get(MCPBehaviour.ULTIMO_MSG);
+		
+		ACLMessage informZ = ult_msg.createReply();
+		informZ.setPerformative(ACLMessage.INFORM);
+		informZ.setContent("" + zeuthen); // IsZeuthen de la ontologia
+		//System.out.println("zeuthen = " + zeuthen);
+	/*	
+		try {
+			myAgent.getContentManager().fillContent(informZ,new IsMyZeuthen());
+		}
+		catch (CodecException ce) {
+			ce.printStackTrace();
+		}
+		catch (OntologyException oe) {
+			oe.printStackTrace();
+		}
+		*/
+		/*
+		MessageTemplate mt = MessageTemplate.and(
+								MessageTemplate.MatchConversationId(informZ.getConversationId()),
+								MessageTemplate.MatchInReplyTo(informZ.getReplyWith()));
+		
+		this.getDataStore().put(MCPBehaviour.MESSAGE_TEMPLATE, mt);
+		*/
+		myAgent.send(informZ);
+				
+	}
+
+	@Override
+	public boolean done() {
+		return true;
+	}
+
+}

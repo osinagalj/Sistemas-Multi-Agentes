@@ -1,0 +1,78 @@
+package fsm;
+
+import Ontology.IsMyZeuthen;
+import Ontology.Movie;
+import Ontology.SeeMovie;
+import agents.AgentNegotiator;
+import jade.content.ContentElement;
+import jade.content.lang.Codec.CodecException;
+import jade.content.onto.OntologyException;
+import jade.content.onto.basic.Action;
+import jade.core.behaviours.Behaviour;
+import jade.lang.acl.ACLMessage;
+
+
+/*
+ Tengo que calcuar mi zeuthen y enviarlo en el message template
+ */
+
+public class CalcularZeuthenBehaviour extends Behaviour {
+
+	@Override
+	public void action() {
+		
+		System.out.println(((AgentNegotiator)myAgent).getNombre() + " esta calculando el Zeuthen");
+		ACLMessage pelicula_propuesta = (ACLMessage)getDataStore().get(MCPBehaviour.PROPUESTA);
+		double zeuthen = -1.0;
+		
+		if(pelicula_propuesta != null) {
+			double uPropActual = ((AgentNegotiator)myAgent).getRatingPropuestaActual();
+			//double uPropRecibida = ((AgentNegotiator)myAgent).getRating(pelicula_propuesta.getContent());	
+			String pelicula_propuest = "";
+			try {
+				ContentElement ce = null;
+					ce = myAgent.getContentManager().extractContent(pelicula_propuesta);
+					Action p = (Action)ce;
+					SeeMovie seemovie = (SeeMovie)p.getAction();
+					Movie mov = seemovie.getMovie();
+					pelicula_propuest =  mov.getName();
+					System.out.println("Movie manager = " + pelicula_propuest);
+				
+			}
+			catch (CodecException ce) {
+				ce.printStackTrace();
+			}
+			catch (OntologyException oe) {
+				oe.printStackTrace();
+			}
+			
+			double uPropRecibida = ((AgentNegotiator)myAgent).getRating(pelicula_propuest);
+			zeuthen = (uPropActual - uPropRecibida) / uPropActual; // CALCULAR ZEUTHEN Z = (U(prop_actual) - U(prop_recibida)) / U(prop_actual)
+				
+		}else {
+			zeuthen = 1;
+		}
+
+		getDataStore().put(MCPBehaviour.ULTIMO_ZEUTHEN, zeuthen);
+		ACLMessage ult_msg = (ACLMessage)getDataStore().get(MCPBehaviour.ULTIMO_MSG);
+		
+		ACLMessage informZ = ult_msg.createReply();
+		informZ.setPerformative(ACLMessage.INFORM);
+		
+		System.out.println("Zeuthen calculador de " + ((AgentNegotiator)myAgent).getNombre() +" = " + zeuthen );
+		try {
+			myAgent.getContentManager().fillContent(informZ, new IsMyZeuthen(zeuthen));
+		} catch (CodecException | OntologyException e) {
+			e.printStackTrace();
+		}
+		
+		myAgent.send(informZ);
+				
+	}
+
+	@Override
+	public boolean done() {
+		return true;
+	}
+
+}

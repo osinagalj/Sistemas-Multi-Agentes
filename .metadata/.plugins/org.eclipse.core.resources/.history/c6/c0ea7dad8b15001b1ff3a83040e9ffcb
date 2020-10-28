@@ -1,0 +1,25 @@
+package fsm_2;
+
+import agents.AgentNegotiator;
+import jade.core.behaviours.Behaviour;
+import jade.lang.acl.ACLMessage;
+
+public class AcuerdoBehaviour extends Behaviour {
+
+	@Override
+	public void action() {
+		
+		ACLMessage pelicula_propuesta = (ACLMessage)getDataStore().get(MCPBehaviour.PROPUESTA);
+		
+		System.out.println("------------------------   " + ((AgentNegotiator)myAgent).getNombre() + " ha aceptado ver la pelicula >>>   " + EvaluarPropuestaBehaviour.FINAL_MOVIE );
+	}
+
+	@Override
+	public boolean done() {
+		return true;
+	}
+
+}
+
+
+ 

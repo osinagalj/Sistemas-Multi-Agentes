@@ -1,0 +1,55 @@
+package Ontology;
+import java.util.Date;
+
+import jade.content.Concept;
+
+public class Movie implements Concept{
+	private String name;
+	private String year ;
+	private String director ;
+	private String actors ;//lista??
+	private jade.util.leap.List listActor;
+	// 
+	public void setNnn(jade.util.leap.List l) {
+		this.listActor = l;
+	}
+	public jade.util.leap.List getNnn() {
+		return listActor;
+	}
+		
+	private Date date;
+	
+	public Movie() {}
+	
+	public Movie(String name) {
+		this.name = name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setYear(String year) {
+		this.year = year;
+	}
+	public String getYear() {
+		return this.name;
+	}
+	
+	public void setDirector(String director) {
+		this.director = director;
+	}
+	public String getDirector() {
+		return this.director;
+	}
+	
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	public Date getDate() {
+		return this.date;
+	}
+	
+}
