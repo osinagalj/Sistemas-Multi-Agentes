@@ -1,19 +1,16 @@
 package fsm;
+
 import Ontology.Movie;
 import Ontology.SeeMovie;
 import agents.Agent_negotiator;
+
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
+
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
-
-//
-//Evaluate the usefulness of the proposal received with the current proposal of the agent itself. If the utility of the proposal
-//received is greater than or equal to the utility of my current film, then I accept the proposal, otherwise I reject it and
-//I must proceed to calculate the zeuthen for both agents
-//
 
 public class Evaluate_proposal_behaviour extends Behaviour {
 	

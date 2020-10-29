@@ -1,4 +1,5 @@
 package agents;
+
 import fsm.MCPBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -6,9 +7,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import behaviours.Subscription_behaviour;
 
-//
-//Agent who starts the movie business. This is created by the responder or uploaded to manually. This agent extends from Agent_negotiator
-//
 
 public class Agent_initiator extends Agent_negotiator {
 			
@@ -28,10 +26,12 @@ public class Agent_initiator extends Agent_negotiator {
 			else{
 				addBehaviour( new Subscription_behaviour(template));
 			}
+
 		}catch (FIPAException fe) { 
 			fe.printStackTrace(); 
 			}
 		}
+		
 }
 	
 

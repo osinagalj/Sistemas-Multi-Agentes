@@ -1,4 +1,5 @@
 package agents;
+
 import java.util.Collections;
 
 import jade.content.lang.Codec;
@@ -10,14 +11,6 @@ import Ontology.MCPOntology;
 import Ontology.Movie;
 import java.util.ArrayList;
 import java.util.List;
-
-//
-//This is an agent that will later be extended by the agents that will carry out the movie negotiation.
-//In this agent the films that will be part of the negotiation are loaded together with the two agents.
-//Next to each movie, a random value is instantiated that indicates how useful the movie is for the agent.
-//When the Agents "Agent_initiator" and "Agent_responder" are instantiated, each of these would have a list of movies with
-//different utilities, generated with the Math.random () function
-//
 
 public class Agent_negotiator extends Agent {
 	

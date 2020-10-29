@@ -18,9 +18,9 @@ public class MCPBehaviour extends FSMBehaviour {
 	
 	public static final String IDR = "ID-Responder";
 	public static final String MESSAGE_TEMPLATE = "message-template";
-	public static final String PROPOSAL = "proposal";
-	public static final String LAST_MSG = "last-msg"; 
-	public static final String LAST_ZEUTHEN = "last-zeuthen";
+	public static final String PROPOSAL = "propuesta";
+	public static final String LAST_MSG = "ultimo-msg"; 
+	public static final String LAST_ZEUTHEN = "ultimo-zeuthen";
 	
 	public MCPBehaviour(boolean initiator, ACLMessage prop_ini,AID id) 	// The boolean initiator is used to identify if the proposal is the initial one or not
 	{ 

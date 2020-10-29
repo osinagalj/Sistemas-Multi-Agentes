@@ -12,10 +12,9 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 
 
-//
-//Calculate the zeuthen and send it. The zeuthen is calculated as:
-//CALCULATE ZEUTHEN Z = (U (current_prop) - U (received_prop)) / U (current_prop)
-//
+/*
+ Tengo que calcuar mi zeuthen y enviarlo en el message template
+ */
 
 public class Calculate_zeuthen_behaviour extends Behaviour {
 
@@ -31,6 +30,7 @@ public class Calculate_zeuthen_behaviour extends Behaviour {
 		}
 		else{
 			double uPropActual = ((Agent_negotiator)myAgent).getRatingCurrentProposal();
+			//double uPropRecibida = ((AgentNegotiator)myAgent).getRating(pelicula_propuesta.getContent());	
 			String pelicula_propuest = "";
 			try {
 				ContentElement ce = null;
@@ -48,7 +48,7 @@ public class Calculate_zeuthen_behaviour extends Behaviour {
 			}
 			
 			double uPropRecibida = ((Agent_negotiator)myAgent).getRating(pelicula_propuest);
-			zeuthen = (uPropActual - uPropRecibida) / uPropActual; 
+			zeuthen = (uPropActual - uPropRecibida) / uPropActual; // CALCULAR ZEUTHEN Z = (U(prop_actual) - U(prop_recibida)) / U(prop_actual)
 				
 		}
 

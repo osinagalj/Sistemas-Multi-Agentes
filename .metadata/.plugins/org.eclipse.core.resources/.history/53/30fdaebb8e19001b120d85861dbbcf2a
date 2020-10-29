@@ -1,9 +1,6 @@
 package agents;
-import Ontology.Movie;
 
-//
-// Container class that has two attributes, a movie and a rating associated with the movie.
-//
+import Ontology.Movie;
 
 public class Rating implements Comparable<Rating> {
 	
@@ -29,6 +26,8 @@ public class Rating implements Comparable<Rating> {
 		return this.movie;
 	}
 
+	
+	
 	public double getRating(){
 		return rating;
 	}

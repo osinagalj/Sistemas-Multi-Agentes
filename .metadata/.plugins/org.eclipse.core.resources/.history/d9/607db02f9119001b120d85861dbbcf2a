@@ -38,7 +38,7 @@ public class Agent_responder extends Agent_negotiator {
 		this.addBehaviour(new Wait_initial_proposal_Behaviour());
 		
 		//Create Agent initiator
-		//createOtherAgent(); 
+		createOtherAgent(); 
 			
 	}
 

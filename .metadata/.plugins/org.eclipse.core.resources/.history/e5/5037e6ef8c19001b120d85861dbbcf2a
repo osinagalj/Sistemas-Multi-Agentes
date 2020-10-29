@@ -1,4 +1,6 @@
 package fsm;
+  
+
 import Ontology.MCPOntology;
 import Ontology.Movie;
 import Ontology.SeeMovie;
@@ -16,11 +18,9 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.lang.acl.ACLMessage;
 
-//
-//Prepare a message and send it. If it is an initial message, it creates an ACLMessage with a PROPOSE and sends it. 
-//In case of a non-initial proposal, create an ACLMessage in response to the last message.
-//
-
+/*
+ Prepara un mensaje y lo envia 
+*/
 public class SendProposalBehaviour extends Behaviour 
 {
 	private Codec codec = new SLCodec();
@@ -37,14 +37,14 @@ public class SendProposalBehaviour extends Behaviour
 			if(ultimoMsg == null)
 			{	
 				System.out.println(" ------------------------------------   Start of the negotiation   ----------------------------------- ");
-				msg = new ACLMessage(ACLMessage.PROPOSE);												/* Print */ System.out.println("\n    >>>>>>>>>>>>>> Propose of "+ ((Agent_negotiator)myAgent).getAgentName() + " = "+ ((Agent_negotiator)myAgent).getCurrentProposal().getName());
+				msg = new ACLMessage(ACLMessage.PROPOSE);											/* Print */ System.out.println("\n    >>>>>>>>>>>>>> Propose of "+ ((Agent_negotiator)myAgent).getAgentName() + " = "+ ((Agent_negotiator)myAgent).getCurrentProposal().getName());
 				msg.addReceiver((AID)getDataStore().get(MCPBehaviour.IDR));
 				msg.setLanguage(codec.getName());
 				msg.setOntology(ontology.getName());
 				msg.setConversationId(String.valueOf(System.currentTimeMillis()));
 				msg.setInReplyTo("");
 			}else{					
-				msg = ultimoMsg.createReply(); 															/* Print */ System.out.println("\n   >>>>>>>>>>>>>>  Propose of  "+ ((Agent_negotiator)myAgent).getAgentName() + " = "+ ((Agent_negotiator)myAgent).getCurrentProposal().getName());
+				msg = ultimoMsg.createReply(); 													/* Print */ System.out.println("\n   >>>>>>>>>>>>>>  Propose of  "+ ((Agent_negotiator)myAgent).getAgentName() + " = "+ ((Agent_negotiator)myAgent).getCurrentProposal().getName());
 				msg.setPerformative(ACLMessage.PROPOSE);	//When a response is created, the ontology and codec are automatically set
 			}
 			

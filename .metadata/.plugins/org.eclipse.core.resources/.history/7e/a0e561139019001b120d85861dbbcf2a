@@ -1,4 +1,5 @@
 package Ontology;
+
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.BasicOntology;
 import jade.content.onto.Ontology;
@@ -8,19 +9,19 @@ import jade.content.schema.ObjectSchema;
 import jade.content.schema.PredicateSchema;
 import jade.content.schema.PrimitiveSchema;
 
-//
-// Using ontologies gives you interoperability
-// An ontology is a structure that defines the concepts and relationships between connections that exist in a particular domain
-// It allows us to separate the ACL message from the internal representation that the agent uses. Internal representation are objects
-//
+/*
+ * Utilizar ontologias te da interoperabilidad
+ * Una ontologia es una estructura que define los conceptos y las relaciones entre conecptos que existen en un dominio particular 
+ * Nos permite separar el mensaje ACL de la represetnacion interna que tuliza el agente,. La representacion interna son objetos
+ */
   
 public class MCPOntology extends Ontology {
 	//private static final long serialVersionUID = 314831391539979184L;
 
-	// Ontology name
+	// Nombre de la ontología
 	public static final String ONTOLOGY_NAME = "negotiation-movie-ontology";
 	
-	// Constants, names of the schemas and the slots (attributes) of the ontology
+	// Constantes, nombres de los esquemas y los slots (atributos) de la ontología 
 	public static final String MOVIE = "movie";
 	public static final String SEE_MOVIE = "see-movie";
 	private static final String MOVIE_NAME = "name";

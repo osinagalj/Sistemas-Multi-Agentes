@@ -8,12 +8,17 @@ import jade.content.onto.OntologyException;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+/*
+Recibo el zeuthen del oponente 
+Comparo y decido quien es el que tiene que conceder
+Si mi zeuthen es el menor, tengo que proponer una propuesta
+Si mi zeuthen es mayor, tengo que esperar una propuesta porque al que le toca proponer es al otro.
 
-//
-//Receive the opponent's zeuthen. Compare and decide who is the one who has to concede
-//If my zeuthen is the youngest, I have to propose a movie
-//If my zeuhen is smaller, I have to wait for a proposal because the one who has to propose is the other. 
-//
+	Va a preparar el template para esperar respuesta
+	
+	//El que tiene menor valor de zheuten tiene que conceder 
+	 * 
+*/
 
 public class Receive_zeuthen_behaviour extends Behaviour {
 
@@ -44,10 +49,11 @@ public class Receive_zeuthen_behaviour extends Behaviour {
 					
 				if(last_zeuthen < zeuthenReceived){ 
 					//Has to propose a movie	
-					aux = 0; 																					/* Print */ System.out.println(((Agent_negotiator)myAgent).getAgentName() + " has to propose");
+					aux = 0; 																			/* Print */ System.out.println(((Agent_negotiator)myAgent).getAgentName() + " has to propose");
 				}else {
 					//Has to wait for the other agent to send a proposal
-					aux = 1;																					/* Print */ System.out.println(((Agent_negotiator)myAgent).getAgentName() + " has to wait");
+					aux = 1;																			/* Print */ System.out.println(((Agent_negotiator)myAgent).getAgentName() + " has to wait");
+					
 				}
 			}
 			else{
