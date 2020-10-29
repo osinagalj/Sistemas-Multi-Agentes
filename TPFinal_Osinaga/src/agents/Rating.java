@@ -4,12 +4,11 @@ import Ontology.Movie;
 
 public class Rating implements Comparable<Rating> {
 	
-	private Movie pelicula; //Tiene que ser el concepto Movie de la ontologia
+	private Movie movie; 
 	private double rating;
 	
-	public Rating(Movie pelicula,double rating) {
-			super();
-			this.pelicula = pelicula;
+	public Rating(Movie movie,double rating) {
+			this.movie = movie;
 			this.rating = rating;
 	}
 	
@@ -18,13 +17,22 @@ public class Rating implements Comparable<Rating> {
 		return Double.compare(this.rating, r.getRating());
 	}
 
+	
+	public void setMovie(Movie movie){
+		this.movie = movie;
+	}
+
+	public Movie getMovie(){
+		return this.movie;
+	}
+
+	
+	
 	public double getRating(){
 		return rating;
 	}
 
-	public Movie getPelicula(){
-		return this.pelicula;
-		
+	public void setRating(double rating){
+		 this.rating = rating;
 	}
-
 }

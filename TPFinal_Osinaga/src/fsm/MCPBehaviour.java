@@ -1,92 +1,89 @@
 package fsm;
-
 import jade.core.AID; 
 import jade.core.behaviours.DataStore;
-
 import jade.core.behaviours.FSMBehaviour;
 import jade.lang.acl.ACLMessage;
+
+
 public class MCPBehaviour extends FSMBehaviour {
 	
-	private static final String ENVIAR_PROP = "enviar-prop";
-	private static final String EVAL_PROP = "eval-prop";
-	private static final String ESPERAR_RTA = "esperar-rta";
-	private static final String CALC_Z = "calc-z";
-	private static final String ESPERAR_PROP = "esperar-prop";
-	private static final String CONFLICTO = "conflicto";
-	private static final String ACUERDO = "acuerdo";
-	private static final String RECIBIR_Z = "recibir-z";
+	private static final String SEND_PROPOSAL = "send-proposal";
+	private static final String EVALUATE_PROPOSAL = "evalute-proposal";
+	private static final String WAIT_ANSWER = "wait-answer";
+	private static final String CALCULATE_Z = "calculate-zeuthen";
+	private static final String WAIT_PROPOSAL = "wait-proposal";
+	private static final String CONFLICT = "conflict";
+	private static final String AGREEMENT = "agreement";
+	private static final String RECEIVE_Z = "receive-z";
 	
 	public static final String IDR = "ID-Responder";
 	public static final String MESSAGE_TEMPLATE = "message-template";
-	public static final String PROPUESTA = "propuesta";
-	public static final String ULTIMO_MSG = "ultimo-msg"; //es un mensaje que lo usamos como clave para todo
-	public static final String ULTIMO_ZEUTHEN = "ultimo-zeuthen";
+	public static final String PROPOSAL = "propuesta";
+	public static final String LAST_MSG = "ultimo-msg"; 
+	public static final String LAST_ZEUTHEN = "ultimo-zeuthen";
 	
-	
-	
-	public MCPBehaviour(boolean initiator, ACLMessage prop_ini,AID id) { //El boolean initiatir es para identificar si la propuesta es la inicial o no
-	
+	public MCPBehaviour(boolean initiator, ACLMessage prop_ini,AID id) 	// The boolean initiator is used to identify if the proposal is the initial one or not
+	{ 
 		DataStore ds = new DataStore();
-		
-		EnviarPropuestaBehaviour enviarProp = new EnviarPropuestaBehaviour();
-		EsperarRespuestaBehaviour esperarRta = new EsperarRespuestaBehaviour();
-		CalcularZeuthenBehaviour calcZ = new CalcularZeuthenBehaviour();
-		RecibirZeuthenBehaviour recibirZ = new RecibirZeuthenBehaviour();
-		EsperarPropuestaBehaviour esperarProp = new EsperarPropuestaBehaviour();
-		EvaluarPropuestaBehaviour evalProp = new EvaluarPropuestaBehaviour();	
-		ConflictoBehaviour conflicto = new ConflictoBehaviour();
-		AcuerdoBehaviour acuerdo = new AcuerdoBehaviour();
+			    
+		SendProposalBehaviour sendProposal = new SendProposalBehaviour();
+		Wait_answer_behaviour waitAnswer = new Wait_answer_behaviour();
+		Calculate_zeuthen_behaviour calculate_z = new Calculate_zeuthen_behaviour();
+		Receive_zeuthen_behaviour receive_z = new Receive_zeuthen_behaviour();
+		Wait_proposal_behaviour waitProposal = new Wait_proposal_behaviour();
+		Evaluate_proposal_behaviour evaluteProposal = new Evaluate_proposal_behaviour();	
+		Conflict_behaviour conflict = new Conflict_behaviour();
+		Agreement_behaviour agreement = new Agreement_behaviour();
 		
 		ds.put(IDR, id);
-		enviarProp.setDataStore(ds);
-		esperarRta.setDataStore(ds);
-		calcZ.setDataStore(ds);
-		recibirZ.setDataStore(ds);
-		esperarProp.setDataStore(ds);
-		evalProp.setDataStore(ds);
-		conflicto.setDataStore(ds);
-		acuerdo.setDataStore(ds);
+		sendProposal.setDataStore(ds);
+		waitAnswer.setDataStore(ds);
+		calculate_z.setDataStore(ds);
+		receive_z.setDataStore(ds);
+		waitProposal.setDataStore(ds);
+		evaluteProposal.setDataStore(ds);
+		conflict.setDataStore(ds);
+		agreement.setDataStore(ds);
 		
+		//----------------    States	---------------------- //
 		if (initiator) {
-			this.registerFirstState(enviarProp, ENVIAR_PROP);
-			this.registerState(evalProp, EVAL_PROP);
-			
+			this.registerFirstState(sendProposal, SEND_PROPOSAL);
+			this.registerState(evaluteProposal, EVALUATE_PROPOSAL);
 		}
 		else {
-			this.registerFirstState(evalProp, EVAL_PROP);
-			this.registerState(enviarProp, ENVIAR_PROP);
-			ds.put(PROPUESTA, prop_ini);
-			ds.put(ULTIMO_MSG, prop_ini);
+			this.registerFirstState(evaluteProposal, EVALUATE_PROPOSAL);
+			this.registerState(sendProposal, SEND_PROPOSAL);
+			ds.put(PROPOSAL, prop_ini);
+			ds.put(LAST_MSG, prop_ini);
 		}
+		this.registerState(waitAnswer, WAIT_ANSWER);
+		this.registerState(calculate_z, CALCULATE_Z);
+		this.registerState(receive_z, RECEIVE_Z);
+		this.registerState(waitProposal, WAIT_PROPOSAL);
+		this.registerLastState(conflict, CONFLICT);
+		this.registerLastState(agreement, AGREEMENT);
 		
-		this.registerState(esperarRta, ESPERAR_RTA);
-		this.registerState(calcZ, CALC_Z);
-		this.registerState(recibirZ, RECIBIR_Z);
-		this.registerState(esperarProp, ESPERAR_PROP);
-		
-		this.registerLastState(conflicto, CONFLICTO);
-		this.registerLastState(acuerdo, ACUERDO);
-		
-		// Transiciones
-		this.registerTransition(ENVIAR_PROP, ESPERAR_RTA, 0);
-		this.registerTransition(ENVIAR_PROP, CONFLICTO, 1);
-		
-		String[] toBeReset1 = {ESPERAR_RTA}; 
-		this.registerTransition(ESPERAR_RTA, CALC_Z, 0, toBeReset1);
-		this.registerTransition(ESPERAR_RTA, ACUERDO, 1);
-		
-		this.registerDefaultTransition(CALC_Z, RECIBIR_Z);
-		
-		String[] toBeReset2 = {RECIBIR_Z};
-		this.registerTransition(RECIBIR_Z, ENVIAR_PROP, 0, toBeReset2);
-		this.registerTransition(RECIBIR_Z, ESPERAR_PROP, 1, toBeReset2);
-		
-		String[] toBeReset3 = {ESPERAR_PROP};
-		this.registerDefaultTransition(ESPERAR_PROP, EVAL_PROP, toBeReset3); //El reset es para resetear el flag
-		
-		this.registerTransition(EVAL_PROP, CALC_Z, 0);
-		this.registerTransition(EVAL_PROP, ACUERDO, 1);
-		this.registerTransition(EVAL_PROP, CONFLICTO, 2);
+		//---------------- Transitions	----------------------//
+		//SEND_PROPOSAL
+		this.registerTransition(SEND_PROPOSAL, WAIT_ANSWER, 0);
+		this.registerTransition(SEND_PROPOSAL, CONFLICT, 1);
+		//WAIT_ANSWER
+		String[] toBeReset1 = {WAIT_ANSWER}; 
+		this.registerTransition(WAIT_ANSWER, CALCULATE_Z, 0, toBeReset1);
+		this.registerTransition(WAIT_ANSWER, AGREEMENT, 1);
+		//CALCULATE_Z
+		this.registerDefaultTransition(CALCULATE_Z, RECEIVE_Z);
+		//RECEIVE_Z
+		String[] toBeReset2 = {RECEIVE_Z};
+		this.registerTransition(RECEIVE_Z, SEND_PROPOSAL, 0, toBeReset2);
+		this.registerTransition(RECEIVE_Z, WAIT_PROPOSAL, 1, toBeReset2);
+		//WAIT_PROPOSAL
+		String[] toBeReset3 = {WAIT_PROPOSAL};
+		this.registerDefaultTransition(WAIT_PROPOSAL, EVALUATE_PROPOSAL, toBeReset3); //El reset es para resetear el flag
+		//EVALUATE_PROPOSAL
+		this.registerTransition(EVALUATE_PROPOSAL, CALCULATE_Z, 0);
+		this.registerTransition(EVALUATE_PROPOSAL, AGREEMENT, 1);
+		this.registerTransition(EVALUATE_PROPOSAL, CONFLICT, 2);
 		
 		
 	}

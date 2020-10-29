@@ -7,11 +7,11 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import fsm.EsperarPropuestaInicialBehaviour;
+import fsm.Wait_initial_proposal_Behaviour;
 import java.util.Scanner; 
 
 
-public class Agent_responder extends AgentNegotiator {
+public class Agent_responder extends Agent_negotiator {
 		
 
 	protected void setup() {
@@ -34,7 +34,7 @@ public class Agent_responder extends AgentNegotiator {
 			fe.printStackTrace();
 		}
 				
-		this.addBehaviour(new EsperarPropuestaInicialBehaviour());
+		this.addBehaviour(new Wait_initial_proposal_Behaviour());
 		
 		//Create Agent initiator
 		createOtherAgent(); 

@@ -1,0 +1,23 @@
+package fsm;
+
+import agents.AgentNegotiator;
+import jade.core.behaviours.Behaviour;
+import jade.lang.acl.ACLMessage;
+
+public class AgreementBehaviour extends Behaviour {
+
+	@Override
+	public void action() {
+		
+		System.out.println("------------------------   " + ((AgentNegotiator)myAgent).getAgentName() + " agreed to see the movie >>>   " + EvaluarPropuestaBehaviour.FINAL_MOVIE );
+	}
+
+	@Override
+	public boolean done() {
+		return true;
+	}
+
+}
+
+
+ 

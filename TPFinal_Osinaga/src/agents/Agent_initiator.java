@@ -5,10 +5,10 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import behaviours.SubscriptionI;
+import behaviours.Subscription_behaviour;
 
 
-public class Agent_initiator extends AgentNegotiator {
+public class Agent_initiator extends Agent_negotiator {
 			
 	protected void setup() {
 
@@ -24,7 +24,7 @@ public class Agent_initiator extends AgentNegotiator {
 			if (result.length > 0)
 				this.addBehaviour(new MCPBehaviour(true,null,result[0].getName()));
 			else{
-				addBehaviour( new SubscriptionI(template));
+				addBehaviour( new Subscription_behaviour(template));
 			}
 
 		}catch (FIPAException fe) { 
